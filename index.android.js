@@ -3,16 +3,18 @@ import { Router, Scene } from 'react-native-router-flux';
 import { AppRegistry } from 'react-native';
 
 
-import PageOne from './js/components/PageOne';
-import PageTwo from './js/components/PageTwo';
+import Dashboard from './js/components/Dashboard';
+import Reaction from './js/components/Reaction';
+import ReactionsHistory from './js/components/ReactionsHistory';
 
 export default class biorreatorApp extends Component {
   render() {
     return (
       <Router>
         <Scene key="root">
-          <Scene key="pageOne" component={PageOne} title="PageOne" initial={true} />
-          <Scene key="pageTwo" component={PageTwo} title="PageTwo" />
+          <Scene key="dashboard" component={Dashboard} title="Dashboard"  />
+          <Scene key="reaction" component={Reaction} title="Criar Reação" initial={true}/>
+          <Scene key="reactionsHistory" component={ReactionsHistory} title="Histórico" />
         </Scene>
       </Router>
     )
