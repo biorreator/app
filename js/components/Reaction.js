@@ -6,25 +6,73 @@ import Navigation from './Navigation';
 
 
 export default class Reaction extends Component {
+  constructor() {
+      super()
+      this.state = {
+        reactionTitle: '',
+        density: '',
+        volume: ''
+      }
+  }
+
+  updateTitle = (text) => {
+    this.setState({reactionTitle: text})
+  }
+
+  updateDesinty = (text) => {
+    this.setState({density: text})
+  }
+
+  updateVolume = (text) => {
+    this.setState({volume: text})
+  }
+
+  onSubmit = () => {
+    if (!this.validateForm()) {
+      this.goToDashboard()
+    }
+    else {
+      alert("Preencha os campos em branco")
+    }
+  }
+
+  goToDashboard = () => {
+    Actions.dashboard({reactionTitle: this.state.reactionTitle ,density: this.state.density, volume: this.state.reactionTitle});
+  }
+
+  validateForm = () => {
+    if (this.state.reactionTitle === '' || this.state.density === '' || this.state.volume === '') {
+      return false
+    }
+    else {
+      return true
+    }
+  }
+
   render() {
-      const goToDashboard = () => Actions.dashboard({title: 'Reação 1', density:'2', volume:'4'});
             return (
               <Container >
                     <Content >
                         <Form style={{ marginTop: 50}}>
                             <Item floatingLabel>
                                 <Label>Título</Label>
-                                <Input />
+                                <Input
+                                  onChangeText = {this.updateTitle}
+                                />
                             </Item>
                             <Item floatingLabel last>
                                 <Label>Densidade</Label>
-                                <Input />
+                                <Input
+                                  onChangeText = {this.updateDesinty}
+                                 />
                             </Item>
                             <Item floatingLabel last>
                                 <Label>Volume</Label>
-                                <Input />
+                                <Input
+                                  onChangeText = {this.updateVolume}
+                                />
                             </Item>
-                            <Button iconLeft style={{marginLeft: 100, marginTop: 10}} onPress={goToDashboard}>
+                            <Button iconLeft style={{marginLeft: 100, marginTop: 10}} onPress={this.onSubmit}>
                                 <Icon name='flame' />
                                 <Text>Iniciar reação</Text>
                             </Button>
