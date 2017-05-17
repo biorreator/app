@@ -12,9 +12,9 @@ export default class biorreatorApp extends Component {
     return (
       <Router>
         <Scene key="root">
-          <Scene key="dashboard" component={Dashboard} title="Dashboard"  />
+          <Scene key="dashboard" component={Dashboard} title="Dashboard" animation="fade"/>
           <Scene key="reaction" component={Reaction} title="Criar Reação" initial={true}/>
-          <Scene key="reactionsHistory" component={ReactionsHistory} title="Histórico" />
+          <Scene key="reactionsHistory" component={ReactionsHistory} title="Histórico" animation="fade"/>
         </Scene>
       </Router>
     )
