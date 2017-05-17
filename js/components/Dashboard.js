@@ -5,14 +5,35 @@ import { Container, Content, Footer, FooterTab, Item, Label, Text, ListItem, Inp
 import Navigation from './Navigation';
 
 export default class Dashboard extends Component {
-
-  state = {
-    modalVisible: false,
+  constructor() {
+      super()
+      this.state = {
+        modalVisible: false,
+        brix: ''
+      }
   }
 
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }
+
+  validateBrix = (brix) => {
+    var re = /^[0-9]+$/;
+    return re.test(brix);
+}
+
+  updateBrix = (text) => {
+    this.setState({brix: text})
+  }
+
+  onSubmit = () => {
+    alert(this.state.brix)
+    if(this.validateBrix(this.state.brix)) {
+      this.setModalVisible(!this.state.modalVisible)
+    }
+
+  }
+
 
   render() {
             return (
@@ -44,11 +65,12 @@ export default class Dashboard extends Component {
                         <View>
                           <Text style={{marginLeft: 120}}>Quantos Grau Brix?</Text>
                           <Item regular>
-                            <Input placeholder='Graus'/>
+                            <Input placeholder='Graus'
+                              onChangeText={this.updateBrix}
+                              value={this.state.brix}
+                            />
                           </Item>
-                          <Button style={{marginTop: 60, marginLeft: 150}} onPress={() => {
-                            this.setModalVisible(!this.state.modalVisible)
-                          }}>
+                          <Button style={{marginTop: 60, marginLeft: 150}} onPress={this.onSubmit}>
                               <Text>Finalizar</Text>
                           </Button>
                         </View>
