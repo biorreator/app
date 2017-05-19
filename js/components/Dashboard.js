@@ -50,7 +50,7 @@ export default class Dashboard extends Component {
                             <Text>Brix:</Text>
                         </ListItem>
                     </List>
-                    <Button style={{marginTop: 60, marginLeft: 120}} onPress={() => {
+                    <Button block iconLeft style={{marginTop: 40, marginLeft: 60, marginRight: 60}} onPress={() => {
                        this.setModalVisible(true)
                      }}>
                         <Text>Aumentar Grau Brix</Text>
@@ -70,7 +70,7 @@ export default class Dashboard extends Component {
                               value={this.state.brix}
                             />
                           </Item>
-                          <Button style={{marginTop: 60, marginLeft: 150}} onPress={this.onSubmit}>
+                          <Button block iconLeft style={{marginTop: 40, marginLeft: 60, marginRight: 60}} onPress={this.onSubmit}>
                               <Text>Finalizar</Text>
                           </Button>
                         </View>

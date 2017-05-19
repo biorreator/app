@@ -72,7 +72,7 @@ export default class Reaction extends Component {
                                   onChangeText = {this.updateVolume}
                                 />
                             </Item>
-                            <Button iconLeft style={{marginLeft: 100, marginTop: 10}} onPress={this.onSubmit}>
+                            <Button block iconLeft style={{marginTop: 40, marginLeft: 60, marginRight: 60}} onPress={this.onSubmit}>
                                 <Icon name='flame' />
                                 <Text>Iniciar reação</Text>
                             </Button>
