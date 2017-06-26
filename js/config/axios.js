@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const BASE_URL = 'base/api/'
+export const BASE_URL = 'https://bioreator-pi.herokuapp.com/api/'
 
 const axiosInstance = axios.create({
   baseUrl: BASE_URL

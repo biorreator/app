@@ -7,10 +7,10 @@ import Navigation from './Navigation';
 
 export default class ReactionsHistory extends Component {
   render() {
-      var items = ['Simon Mignolet','Nathaniel Clyne','Dejan Lovren','Mama Sakho','Emre Can'];
+      var items = ['Reação 1','Reação 2','Reação 3','Reação 4','Reação 5'];
             return (
               <Container>
-                <Content>
+                <Content style={{ marginTop: 50}}>
                     <List dataArray={items}
                         renderRow={(item) =>
                             <ListItem>

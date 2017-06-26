@@ -1,17 +1,53 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Modal, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, Modal, TouchableHighlight, ActivityIndicator } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Container, Content, Footer, FooterTab, Item, Label, Text, ListItem, Input,Button, List, Badge} from 'native-base';
 import Navigation from './Navigation';
 import { StockLine } from 'react-native-pathjs-charts'
+import axios from '../config/axios';
 
 export default class Dashboard extends Component {
   constructor() {
       super()
       this.state = {
         modalVisible: false,
-        brix: ''
+        brix: '',
+        density: '',
+        id: '',
+        ph: '',
+        reactionId: '',
+        temperature:'',
+        time: '',
+        data: [],
+        loading: true
       }
+  }
+
+  componentDidMount() {
+    axios.get('https://2b180d1a.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/')
+      .then(response => response.data)
+          .then(measure => {
+            this.setState({ ...measure[0]});
+            console.log(measure[measure.length-1]);
+            temperature = this.state.temperature.toFixed(2);
+            density = this.state.density.toFixed(3);
+            this.setState({temperature: temperature, density: density});
+    }).then (
+      axios.get('https://2b180d1a.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/graph')
+        .then(response => response.data)
+          .then(data => {
+            this.setState({data: data});
+            console.log(this.state.data);
+            console.log(this.state.data.length);
+          })
+          .catch(function (error) {
+            alert(error);
+        })
+    )
+      .catch(function (error) {
+        alert(error);
+    });
+
   }
 
   setModalVisible(visible) {
@@ -32,129 +68,15 @@ export default class Dashboard extends Component {
     if(this.validateBrix(this.state.brix)) {
       this.setModalVisible(!this.state.modalVisible)
     }
-
+    axios.post('https://2b180d1a.ngrok.io/api/turnon', {
+      mode: 'on',
+      port: 22
+    })
   }
 
 
   render() {
-    let data = [
-    [{
-      "x": 0,
-      "y": 47782
-    }, {
-      "x": 1,
-      "y": 48497
-    }, {
-      "x": 2,
-      "y": 77128
-    }, {
-      "x": 3,
-      "y": 73413
-    }, {
-      "x": 4,
-      "y": 58257
-    }, {
-      "x": 5,
-      "y": 40579
-    }, {
-      "x": 6,
-      "y": 72893
-    }, {
-      "x": 7,
-      "y": 60663
-    }, {
-      "x": 8,
-      "y": 15715
-    }, {
-      "x": 9,
-      "y": 40305
-    }, {
-      "x": 10,
-      "y": 68592
-    }, {
-      "x": 11,
-      "y": 95664
-    }, {
-      "x": 12,
-      "y": 17908
-    }, {
-      "x": 13,
-      "y": 22838
-    }, {
-      "x": 14,
-      "y": 32153
-    }, {
-      "x": 15,
-      "y": 56594
-    }, {
-      "x": 16,
-      "y": 76348
-    }, {
-      "x": 17,
-      "y": 46222
-    }, {
-      "x": 18,
-      "y": 59304
-    }],
-    [{
-      "x": 0,
-      "y": 125797
-    }, {
-      "x": 1,
-      "y": 256656
-    }, {
-      "x": 2,
-      "y": 222260
-    }, {
-      "x": 3,
-      "y": 265642
-    }, {
-      "x": 4,
-      "y": 263902
-    }, {
-      "x": 5,
-      "y": 113453
-    }, {
-      "x": 6,
-      "y": 289461
-    }, {
-      "x": 7,
-      "y": 293850
-    }, {
-      "x": 8,
-      "y": 206079
-    }, {
-      "x": 9,
-      "y": 240859
-    }, {
-      "x": 10,
-      "y": 152776
-    }, {
-      "x": 11,
-      "y": 297282
-    }, {
-      "x": 12,
-      "y": 175177
-    }, {
-      "x": 13,
-      "y": 169233
-    }, {
-      "x": 14,
-      "y": 237827
-    }, {
-      "x": 15,
-      "y": 242429
-    }, {
-      "x": 16,
-      "y": 218230
-    }, {
-      "x": 17,
-      "y": 161511
-    }, {
-      "x": 18,
-      "y": 153227
-    }]
-  ]
+  let data = this.state.data;
   let options = {
     width: 300,
     height: 200,
@@ -200,6 +122,12 @@ export default class Dashboard extends Component {
       }
     }
   }
+  if(this.state.data.length === 0 ){
+    return (
+       <ActivityIndicator size={60} color="#21ba57" style={styles.activity} />
+    )
+  }
+  else {
             return (
               <Container>
                 <Content>
@@ -210,19 +138,19 @@ export default class Dashboard extends Component {
                 <View>
                     <List style={{marginLeft: 20, width: 150 }}>
                         <ListItem  style={{borderBottomWidth: 0}}>
-                            <Text>Densidade: {this.props.density}</Text>
+                            <Text>Densidade: {this.state.density} kg/m³</Text>
                         </ListItem>
                         <ListItem style={{borderBottomWidth: 0}}>
-                            <Text>Ph:</Text>
+                            <Text>Ph: {this.state.ph}</Text>
                         </ListItem>
                         <ListItem style={{borderBottomWidth: 0}}>
-                            <Text>Brix:</Text>
+                            <Text> Grau Brix: {this.state.brix} ºBx</Text>
                         </ListItem>
                     </List>
                     </View>
                     <View>
                         <Badge style={{width: 90, height: 90, borderRadius: 50, marginLeft: 80, marginTop: 40}}>
-                          <Text style={{marginTop: 30, }}>35º</Text>
+                          <Text style={{marginTop: 30, }}>{this.state.temperature}º</Text>
                         </Badge>
                     </View>
                     </View>
@@ -260,11 +188,18 @@ export default class Dashboard extends Component {
 
             );
         }
+      }
     }
 
     const styles = StyleSheet.create({
       container: {
         marginTop: 50,
-
+      },
+      activity: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row'
       }
+
     })

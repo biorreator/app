@@ -3,54 +3,42 @@ import { View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Container, Content, Footer, FooterTab, Item, Label, Text, Form, Input,Button,Icon} from 'native-base';
 import Navigation from './Navigation';
+import axios from '../config/axios';
 
 
 export default class Reaction extends Component {
   constructor() {
       super()
       this.state = {
-        reactionTitle: '',
-        density: '',
+        id: '',
+        startTime: '',
+        status: '',
+        title: '',
         volume: ''
       }
   }
 
-  updateTitle = (text) => {
-    this.setState({reactionTitle: text})
-  }
-
-  updateDesinty = (text) => {
-    this.setState({density: text})
-  }
-
-  updateVolume = (text) => {
-    this.setState({volume: text})
+  componentDidMount() {
+    axios.get('https://bioreator-pi.herokuapp.com/api/reactions/')
+      .then(response => response.data)
+          .then(reaction => {
+            this.setState({ ...reaction[reaction.length-1]});
+    })
+      .catch(function (error) {
+        alert(error);
+    });
   }
 
   onSubmit = () => {
-    if (!this.validateForm()) {
-      this.goToDashboard()
-    }
-    else {
-      alert("Preencha os campos em branco")
-    }
+      this.goToDashboard();
   }
 
   goToDashboard = () => {
-    Actions.dashboard({reactionTitle: this.state.reactionTitle ,density: this.state.density, volume: this.state.reactionTitle});
-  }
-
-  validateForm = () => {
-    if (this.state.reactionTitle === '' || this.state.density === '' || this.state.volume === '') {
-      return false
-    }
-    else {
-      return true
-    }
+    Actions.dashboard({volume: this.state.volume , density: this.state.volume, volume: this.state.volume});
   }
 
   render() {
-            return (
+          return (
               <Container >
                     <Content >
                         <Form style={{ marginTop: 50}}>
