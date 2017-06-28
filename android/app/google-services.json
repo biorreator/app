@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "283303297214",
+    "firebase_url": "https://pi2-biorretor.firebaseio.com",
+    "project_id": "pi2-biorretor",
+    "storage_bucket": "pi2-biorretor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:283303297214:android:77597f2b873a75bf",
+        "android_client_info": {
+          "package_name": "com.biorreator.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "283303297214-p8an2lab1nm76m4ihna48dgjcrcg9ral.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3Cm7KWUGaX85pnKrraVieqsfAZO5B0O4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
