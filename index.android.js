@@ -12,7 +12,6 @@ export default class biorreatorApp extends Component {
   componentDidMount() {
         FCM.getFCMToken().then(token => {
             console.log(token)
-            alert(token)
             // run `react-native log-android` to get device token
         });
         this.notificationListener = FCM.on(FCMEvent.Notification, async (notif) => {
