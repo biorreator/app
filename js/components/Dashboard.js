@@ -24,7 +24,7 @@ export default class Dashboard extends Component {
   }
 
   componentDidMount() {
-    axios.get('https://78e99c72.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/')
+    axios.get('https://fa202b78.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/')
       .then(response => response.data)
           .then(measure => {
             this.setState({ ...measure[0]});
@@ -33,7 +33,7 @@ export default class Dashboard extends Component {
             density = this.state.density.toFixed(3);
             this.setState({temperature: temperature, density: density});
     }).then (
-      axios.get('https://78e99c72.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/graph')
+      axios.get('https://fa202b78.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/graph')
         .then(response => response.data)
           .then(data => {
             this.setState({data: data});
@@ -68,7 +68,7 @@ export default class Dashboard extends Component {
     if(this.validateBrix(this.state.brix)) {
       this.setModalVisible(!this.state.modalVisible)
     }
-    axios.post('https://78e99c72.ngrok.io/api/turnon', {
+    axios.post('https://fa202b78.ngrok.io/api/turnon', {
       mode: 'on',
       port: 22
     })

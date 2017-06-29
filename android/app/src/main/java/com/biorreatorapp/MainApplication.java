@@ -2,6 +2,7 @@ package com.biorreatorapp;
 
 import android.app.Application;
 
+import com.evollu.react.fcm.FIRMessagingPackage;
 import com.facebook.react.ReactApplication;
 import com.evollu.react.fcm.FIRMessagingPackage;
 import com.horcrux.svg.RNSvgPackage;

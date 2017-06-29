@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:283303297214:android:77597f2b873a75bf",
+        "mobilesdk_app_id": "1:283303297214:android:84f2bcabe3a2b098",
         "android_client_info": {
-          "package_name": "com.biorreator.android"
+          "package_name": "com.biorreatorapp"
         }
       },
       "oauth_client": [
