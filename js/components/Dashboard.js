@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Modal, TouchableHighlight, ActivityIndicator } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { Container, Content, Footer, FooterTab, Item, Label, Text, ListItem, Input,Button, List, Badge} from 'native-base';
+import { Container, Content, Footer, FooterTab, Item, Label, Text, ListItem, Input,Button, List, Badge, Picker} from 'native-base';
 import Navigation from './Navigation';
 import { StockLine } from 'react-native-pathjs-charts'
 import axios from '../config/axios';
@@ -24,7 +24,7 @@ export default class Dashboard extends Component {
   }
 
   componentDidMount() {
-    axios.get('https://fa202b78.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/')
+    axios.get('https://8bd2bca2.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/')
       .then(response => response.data)
           .then(measure => {
             this.setState({ ...measure[0]});
@@ -33,7 +33,7 @@ export default class Dashboard extends Component {
             density = this.state.density.toFixed(3);
             this.setState({temperature: temperature, density: density});
     }).then (
-      axios.get('https://fa202b78.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/graph')
+      axios.get('https://8bd2bca2.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/graph')
         .then(response => response.data)
           .then(data => {
             this.setState({data: data});
@@ -54,8 +54,22 @@ export default class Dashboard extends Component {
     this.setState({modalVisible: visible});
   }
 
+  turnMotor(action) {
+    axios.post('https://8bd2bca2.ngrok.io/api/turnon', {
+      mode: action,
+      port: 17
+    })
+  }
+
+  turnPump(action) {
+    axios.post('https://8bd2bca2.ngrok.io/api/turnon', {
+      mode: action,
+      port: 22
+    })
+  }
+
   validateBrix = (brix) => {
-    var re = /^[0-9]+$/;
+    var re = /^[0-5]+$/;
     return re.test(brix);
 }
 
@@ -67,11 +81,17 @@ export default class Dashboard extends Component {
     alert(this.state.brix)
     if(this.validateBrix(this.state.brix)) {
       this.setModalVisible(!this.state.modalVisible)
+      axios.post('https://8bd2bca2.ngrok.io/api/turnon', {
+        mode: 'on',
+        port: 27
+      })
+    } else {
+      alert("Aumente de 1 a 5 graus brix")
     }
-    axios.post('https://fa202b78.ngrok.io/api/turnon', {
-      mode: 'on',
-      port: 22
-    })
+  }
+
+  closeModal = () => {
+    this.setModalVisible(!this.state.modalVisible)
   }
 
 
@@ -159,6 +179,26 @@ export default class Dashboard extends Component {
                      }}>
                         <Text>Aumentar Grau Brix</Text>
                     </Button>
+                    <Button block iconLeft style={{marginTop: 40, marginLeft: 60, marginRight: 60, marginBottom: 20}} onPress={() => {
+                       this.turnMotor("on")
+                     }}>
+                        <Text>Ligar motor</Text>
+                    </Button>
+                    <Button block iconLeft style={{marginTop: 40, marginLeft: 60, marginRight: 60, marginBottom: 20}} onPress={() => {
+                       this.turnMotor("off")
+                     }}>
+                        <Text>Desligar motor</Text>
+                    </Button>
+                    <Button block iconLeft style={{marginTop: 40, marginLeft: 60, marginRight: 60, marginBottom: 20}} onPress={() => {
+                       this.turnPump("on")
+                     }}>
+                        <Text>Ligar bomba</Text>
+                    </Button>
+                    <Button block iconLeft style={{marginTop: 40, marginLeft: 60, marginRight: 60, marginBottom: 20}} onPress={() => {
+                       this.turnPump("off")
+                     }}>
+                        <Text>Desligar bomba</Text>
+                    </Button>
                     <Modal
                       animationType={"fade"}
                       transparent={false}
@@ -176,6 +216,9 @@ export default class Dashboard extends Component {
                           </Item>
                           <Button block iconLeft style={{marginTop: 40, marginLeft: 60, marginRight: 60}} onPress={this.onSubmit}>
                               <Text>Finalizar</Text>
+                          </Button>
+                          <Button block iconLeft style={{marginTop: 40, marginLeft: 60, marginRight: 60}} onPress={this.closeModal}>
+                              <Text>Voltar</Text>
                           </Button>
                         </View>
                        </View>
