@@ -19,7 +19,7 @@ export default class Reaction extends Component {
   }
 
   componentDidMount() {
-    axios.get('https://8bd2bca2.ngrok.io/api/reactions/')
+    axios.get('https://b0cdcc49.ngrok.io/api/reactions/')
       .then(response => response.data)
           .then(reaction => {
             this.setState({ ...reaction[reaction.length-1]});

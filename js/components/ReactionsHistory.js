@@ -2,19 +2,39 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Container, Content, Footer, FooterTab, Item, Label, Text, Input,Button,List, ListItem} from 'native-base';
+import axios from '../config/axios';
 
 import Navigation from './Navigation';
 
 export default class ReactionsHistory extends Component {
+  constructor() {
+      super()
+      this.state = {
+        reactions: []
+      }
+  }
+
+  componentDidMount() {
+    axios.get('https://b0cdcc49.ngrok.io/api/reactions/')
+      .then(response => response.data)
+          .then(history => {
+            this.setState({reactions: history});
+    })
+      .catch(function (error) {
+        alert(error);
+    });
+
+  }
   render() {
-      var items = ['Reação 1','Reação 2','Reação 3','Reação 4','Reação 5'];
+      var items = this.state.reactions;
             return (
               <Container>
                 <Content style={{ marginTop: 50}}>
                     <List dataArray={items}
                         renderRow={(item) =>
                             <ListItem>
-                                <Text>{item}</Text>
+                                <Text>{item.title}</Text>
+                                <Text>{item.startTime}</Text>
                             </ListItem>
                         }>
                     </List>

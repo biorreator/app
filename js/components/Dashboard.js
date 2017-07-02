@@ -24,7 +24,7 @@ export default class Dashboard extends Component {
   }
 
   componentDidMount() {
-    axios.get('https://8bd2bca2.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/')
+    axios.get('https://b0cdcc49.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/')
       .then(response => response.data)
           .then(measure => {
             this.setState({ ...measure[0]});
@@ -33,7 +33,7 @@ export default class Dashboard extends Component {
             density = this.state.density.toFixed(3);
             this.setState({temperature: temperature, density: density});
     }).then (
-      axios.get('https://8bd2bca2.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/graph')
+      axios.get('https://b0cdcc49.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/graph')
         .then(response => response.data)
           .then(data => {
             this.setState({data: data});
@@ -55,14 +55,14 @@ export default class Dashboard extends Component {
   }
 
   turnMotor(action) {
-    axios.post('https://8bd2bca2.ngrok.io/api/turnon', {
+    axios.post('https://b0cdcc49.ngrok.io/api/turnon', {
       mode: action,
       port: 17
     })
   }
 
   turnPump(action) {
-    axios.post('https://8bd2bca2.ngrok.io/api/turnon', {
+    axios.post('https://b0cdcc49.ngrok.io/api/turnon', {
       mode: action,
       port: 22
     })
@@ -78,10 +78,9 @@ export default class Dashboard extends Component {
   }
 
   onSubmit = () => {
-    alert(this.state.brix)
     if(this.validateBrix(this.state.brix)) {
       this.setModalVisible(!this.state.modalVisible)
-      axios.post('https://8bd2bca2.ngrok.io/api/turnon', {
+      axios.post('https://b0cdcc49.ngrok.io/api/turnon', {
         mode: 'on',
         port: 27
       })
@@ -158,13 +157,13 @@ export default class Dashboard extends Component {
                 <View>
                     <List style={{marginLeft: 20, width: 150 }}>
                         <ListItem  style={{borderBottomWidth: 0}}>
-                            <Text>Densidade: {this.state.density} kg/m³</Text>
+                            <Text>Densidade: {this.state.density + " kg/m³"} </Text>
                         </ListItem>
                         <ListItem style={{borderBottomWidth: 0}}>
                             <Text>Ph: {this.state.ph}</Text>
                         </ListItem>
                         <ListItem style={{borderBottomWidth: 0}}>
-                            <Text> Grau Brix: {this.state.brix} ºBx</Text>
+                            <Text> Grau Brix: {this.state.brix + " ºBx"} </Text>
                         </ListItem>
                     </List>
                     </View>
@@ -179,26 +178,30 @@ export default class Dashboard extends Component {
                      }}>
                         <Text>Aumentar Grau Brix</Text>
                     </Button>
-                    <Button block iconLeft style={{marginTop: 40, marginLeft: 60, marginRight: 60, marginBottom: 20}} onPress={() => {
-                       this.turnMotor("on")
-                     }}>
-                        <Text>Ligar motor</Text>
-                    </Button>
-                    <Button block iconLeft style={{marginTop: 40, marginLeft: 60, marginRight: 60, marginBottom: 20}} onPress={() => {
-                       this.turnMotor("off")
-                     }}>
-                        <Text>Desligar motor</Text>
-                    </Button>
-                    <Button block iconLeft style={{marginTop: 40, marginLeft: 60, marginRight: 60, marginBottom: 20}} onPress={() => {
-                       this.turnPump("on")
-                     }}>
-                        <Text>Ligar bomba</Text>
-                    </Button>
-                    <Button block iconLeft style={{marginTop: 40, marginLeft: 60, marginRight: 60, marginBottom: 20}} onPress={() => {
-                       this.turnPump("off")
-                     }}>
-                        <Text>Desligar bomba</Text>
-                    </Button>
+                    <View style={{flexDirection: 'row'}}>
+                      <Button block iconLeft success style={{marginTop: 40, marginLeft: 60, marginRight: 0, marginBottom: 20, paddingRight: 26}} onPress={() => {
+                         this.turnMotor("on")
+                       }}>
+                          <Text>Ligar motor</Text>
+                      </Button>
+                      <Button block iconLeft danger style={{marginTop: 40, marginLeft: 0, marginRight: 130, marginBottom: 20}} onPress={() => {
+                         this.turnMotor("off")
+                       }}>
+                          <Text>Desligar motor</Text>
+                      </Button>
+                    </View>
+                    <View style={{flexDirection: 'row'}}>
+                      <Button block iconLeft success style={{marginTop: 40, marginLeft: 60, marginRight: 0, marginBottom: 20, paddingRight: 16}} onPress={() => {
+                         this.turnPump("on")
+                       }}>
+                          <Text>Ligar bomba</Text>
+                      </Button>
+                      <Button block iconLeft danger style={{marginTop: 40, marginLeft: 0, marginRight: 130, marginBottom: 20}} onPress={() => {
+                         this.turnPump("off")
+                       }}>
+                          <Text>Desligar bomba</Text>
+                      </Button>
+                    </View>
                     <Modal
                       animationType={"fade"}
                       transparent={false}
