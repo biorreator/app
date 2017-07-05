@@ -11,6 +11,8 @@ export default class Dashboard extends Component {
       super()
       this.state = {
         modalVisible: false,
+        reaction: {},
+        lastMeasure: {},
         brix: '',
         density: '',
         id: '',
@@ -19,35 +21,47 @@ export default class Dashboard extends Component {
         temperature:'',
         time: '',
         data: [],
-        loading: true
+        loading: true,
+        currentId: ''
       }
   }
 
   componentDidMount() {
-    axios.get('https://ffd45fec.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/')
+    axios.get('https://biorreator.pagekite.me/api/reactions/')
       .then(response => response.data)
-          .then(measure => {
-            this.setState({ ...measure[0]});
-            console.log(measure[measure.length-1]);
-            temperature = this.state.temperature.toFixed(2);
-            density = this.state.density.toFixed(3);
-            this.setState({temperature: temperature, density: density});
-    }).then (
-      axios.get('https://ffd45fec.ngrok.io/api/reactions/881ba792-1ee8-422a-8d7c-a4fd44eff703/measures/graph')
+          .then(history => {
+            history.forEach((r) => {
+              if (r.status === true) {
+                this.setState({currentId: r.id})
+                this.setState({reaction: Object.assign(this.state.reaction, r)})
+                this.setState({lastMeasure: Object.assign({},this.state.reaction.measures[this.state.reaction.measures.length-1])})
+              }
+            })
+    }).then( () => {
+      axios.get('https://biorreator.pagekite.me/api/reactions/get-current-measures')
         .then(response => response.data)
-          .then(data => {
-            this.setState({data: data});
-            console.log(this.state.data);
-            console.log(this.state.data.length);
-          })
-          .catch(function (error) {
-            alert(error);
+            .then(measure => {
+              this.setState({
+                temperature: parseFloat(measure.temperature).toFixed(2),
+                density: parseFloat(measure.density).toFixed(2),
+                ph: parseFloat(measure.ph).toFixed(2)
+              });
+            }).then ( () => {
+              axios.get('https://biorreator.pagekite.me/api/reactions/'+ this.state.currentId +'/measures/graph')
+                .then(response => response.data)
+                  .then(data => {
+                    this.setState({data: data});
+                    console.log(this.state.data);
+                    console.log(this.state.data.length);
+                  })
+                  .catch(function (error) {
+                    alert(error);
+                })
+              })
         })
-    )
-      .catch(function (error) {
-        alert(error);
-    });
-
+        .catch(function (error) {
+          alert(error);
+      });
   }
 
   setModalVisible(visible) {
@@ -55,14 +69,14 @@ export default class Dashboard extends Component {
   }
 
   turnMotor(action) {
-    axios.post('https://ffd45fec.ngrok.io/api/turnon', {
+    axios.post('https://biorreator.pagekite.me/api/turnon', {
       mode: action,
       port: 17
     })
   }
 
   turnPump(action) {
-    axios.post('https://ffd45fec.ngrok.io/api/turnon', {
+    axios.post('https://biorreator.pagekite.me/api/turnon', {
       mode: action,
       port: 22
     })
@@ -80,7 +94,7 @@ export default class Dashboard extends Component {
   onSubmit = () => {
     if(this.validateBrix(this.state.brix)) {
       this.setModalVisible(!this.state.modalVisible)
-      axios.post('https://ffd45fec.ngrok.io/api/turnon/sugar', {
+      axios.post('https://biorreator.pagekite.me/api/turnon/sugar', {
         brix: this.state.brix,
         port: 27
       })
@@ -163,7 +177,7 @@ export default class Dashboard extends Component {
                             <Text>Ph: {this.state.ph}</Text>
                         </ListItem>
                         <ListItem style={{borderBottomWidth: 0}}>
-                            <Text> Grau Brix: {this.state.brix + " ºBx"} </Text>
+                            <Text> Grau Brix: {this.state.lastMeasure.brix + " ºBx"} </Text>
                         </ListItem>
                     </List>
                     </View>

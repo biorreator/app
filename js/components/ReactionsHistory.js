@@ -15,7 +15,7 @@ export default class ReactionsHistory extends Component {
   }
 
   componentDidMount() {
-    axios.get('https://ffd45fec.ngrok.io/api/reactions/')
+    axios.get('https://biorreator.pagekite.me/api/reactions/')
       .then(response => response.data)
           .then(history => {
             this.setState({reactions: history});
