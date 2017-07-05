@@ -71,7 +71,7 @@ export default class Dashboard extends Component {
   turnMotor(action) {
     axios.post('https://biorreator.pagekite.me/api/turnon', {
       mode: action,
-      port: 17
+      port: 18
     })
   }
 
@@ -114,6 +114,7 @@ export default class Dashboard extends Component {
     width: 300,
     height: 200,
     color: '#000000',
+    fill: false,
     margin: {
       top: 100,
       left: 50,
